@@ -10,11 +10,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 class MainActivity : AppCompatActivity() {
 
     private val repo = ProductsRepo()
-    private val productAdapter = ProductAdapter(repo.sortedByStock)
+    private val productAdapter = ProductAdapter(repo.products)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +24,10 @@ class MainActivity : AppCompatActivity() {
         val etNewStock: EditText = findViewById(R.id.etNewStock)
         val btnUpdate: Button = findViewById(R.id.btnUpdate)
         val recyclerView = findViewById<RecyclerView>(R.id.mainRecyclerView)
+        val swipe: SwipeRefreshLayout = findViewById(R.id.itemsswipetorefresh)
+
         btnUpdate.setOnClickListener {
-            val list = productAdapter.products
+            val list = repo.products.toMutableList()
 
             if (list.size <= 0) {
                 Toast.makeText(this@MainActivity, "List size is 0 or < 0", Toast.LENGTH_SHORT)
@@ -32,15 +35,23 @@ class MainActivity : AppCompatActivity() {
             } else {
                 val newStock: String = etNewStock.text.toString()
                 list[0].stock = newStock.toInt()
+
                 productAdapter.update(list)
                 Toast.makeText(this@MainActivity, "Stock Updated.", Toast.LENGTH_SHORT).show()
+            }
 
-      1      }
         }
+
+//        swipe.setOnRefreshListener {
+//            recyclerView.adapter = productAdapter
+//            productAdapter.update(list)
+//            swipe.isRefreshing = false
+//        }
 
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = productAdapter
+
         }
     }
 

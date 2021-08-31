@@ -1,9 +1,11 @@
 package com.example.diffutils
 
+import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 
-class ProductsDiffCallback(private val oldList: List<Products>,
-                           private val newList: List<Products>
+class ProductsDiffCallback(
+    private val oldList: List<Products>,
+    private val newList: List<Products>
 ) : DiffUtil.Callback() {
 
     //eski liste  boyutu

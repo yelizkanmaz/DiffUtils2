@@ -29,15 +29,13 @@ class ProductAdapter(productList: List<Products>) :
     }
 
     fun update(product: List<Products>) {
-        this.products.addAll(product)
-
         val diffCallback = ProductsDiffCallback(this.products, product)
-        val diffResult = DiffUtil.calculateDiff(diffCallback) //farklarını hesaplar
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
 
         this.products.clear()
         this.products.addAll(product)
-        diffResult.dispatchUpdatesTo(this) //güncellemeleri adapter'a gönderir
 
+        diffResult.dispatchUpdatesTo(this) //güncellemeleri adapter'a gönderir
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,7 +43,7 @@ class ProductAdapter(productList: List<Products>) :
         private val name: TextView = itemView.findViewById(R.id.txtName)
 
         fun bind(product: Products) {
-            name.text = product.name
+            name.text = product.toString()
         }
     }
 }
