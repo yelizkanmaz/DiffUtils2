@@ -14,7 +14,6 @@
         android:layout_height="match_parent"
         android:layout_marginRight="15dp"
         android:gravity="center"
-        android:textSize="20dp"
         tools:text="asdfgh" />
 
 </LinearLayout>

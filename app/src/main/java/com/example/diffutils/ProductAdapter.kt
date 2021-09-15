@@ -1,5 +1,6 @@
 package com.example.diffutils
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 class ProductAdapter(productList: List<Products>) :
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
-    val products = mutableListOf<Products>()
+    val oldList = mutableListOf<Products>()
 
     init {
-        products.addAll(productList)
+        oldList.addAll(productList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,26 +23,27 @@ class ProductAdapter(productList: List<Products>) :
         return ViewHolder(view)
     }
 
-    override fun getItemCount() = products.size
+    override fun getItemCount() = oldList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(product = products[position])
+        holder.bind(product = oldList[position])
     }
 
-    fun update(product: List<Products>) {
-        val diffCallback = ProductsDiffCallback(this.products, product)
+    @SuppressLint("NotifyDataSetChanged")
+    fun update(newList: List<Products>) {
+        val diffCallback = ProductsDiffCallback(oldList, newList)
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
-        this.products.clear()
-        this.products.addAll(product)
+        this.oldList.clear()
+        this.oldList.addAll(newList)
 
         diffResult.dispatchUpdatesTo(this) //güncellemeleri adapter'a gönderir
+
+        notifyDataSetChanged()
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         private val name: TextView = itemView.findViewById(R.id.txtName)
-
         fun bind(product: Products) {
             name.text = product.toString()
         }
